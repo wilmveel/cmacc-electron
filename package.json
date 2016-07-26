@@ -1,0 +1,36 @@
+{
+  "name": "cmacc-electron",
+  "version": "1.0.0",
+  "description": "electron app cmacc",
+  "main": "main.js",
+  "scripts": {
+    "test": "mocha",
+    "prestart":"./node_modules/.bin/webpack",
+    "start": "./node_modules/.bin/electron .",
+    "postinstall": "bower install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wilmveel/cmacc-electron.git"
+  },
+  "keywords": [
+    "electron",
+    "common accord"
+  ],
+  "author": "axel scheele",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wilmveel/cmacc-electron/issues"
+  },
+  "dependencies": {
+    "cmacc-compiler":"wilmveel/cmacc-compiler",
+    "cmacc-docs":"wilmveel/cmacc-docs",
+    "ipfs-api": "^6.0.3",
+    "ipfsd-ctl": "^0.14.0",
+    "webpack": "^1.13.1"
+  },
+  "devDependencies": {
+    "electron-prebuilt": "^1.2.8"
+  },
+  "homepage": "https://github.com/wilmveel/cmacc-electron#readme"
+}

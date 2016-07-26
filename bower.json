@@ -1,0 +1,23 @@
+{
+  "name": "commonaccordelectron",
+  "description": "Common Accord Electron",
+  "main": "main.js",
+  "authors": [
+    "Axel Scheele"
+  ],
+  "license": "MIT",
+  "moduleType": [],
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+
+  "dependencies": {
+    "cmacc-elements":"wilmveel/cmacc-elements"
+
+  }
+}
