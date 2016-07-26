@@ -65,7 +65,7 @@
             <app-header>
                 <app-toolbar>
                     <div main-title>Common Accord</div>
-                    <paper-icon-button icon="menu" on-tap="go">{{files[3]}}</paper-icon-button>
+
                 </app-toolbar>
                 <paper-tabs selected="{{page}}">
                     <paper-tab>Document</paper-tab>
@@ -120,6 +120,14 @@
                     console.log(e.detail.data);
                 }.bind(this), true);
 
+                var ipc = require('electron').ipcRenderer;
+
+                ipc.on('open-document',function(e, args){
+                    console.log(args)
+                    this.go(args[0])
+                }.bind(this), true)
+
+
                 this.page = 3;
                 this.files = [
                     __dirname +'/node_modules/cmacc-docs/doc/test.md',
@@ -143,7 +151,7 @@
             },
             go: function (e) {
                 //console.log(e.model.item);
-                this.$.ast.file = __dirname + '/node_modules/cmacc-docs/doc/acme/angel-round/safe_robinson_v3.md';
+                this.$.ast.file = e;//__dirname + '/node_modules/cmacc-docs/doc/acme/angel-round/safe_robinson_v3.md';
                 //document.getElementById('left').toggle();
             },
             getDoc: function () {

@@ -26,7 +26,8 @@ function createWindow() {
     // Open the DevTools.
     win.webContents.openDevTools();
 
-    require('./src/menu')
+    const menu = require('./src/menu')
+    menu(win);
 
     // Emitted when the window is closed.
     win.on('closed', () => {
