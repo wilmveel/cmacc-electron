@@ -8,7 +8,7 @@
     "prestart": "./node_modules/.bin/webpack",
     "start": "./node_modules/.bin/electron .",
     "postinstall": "bower install",
-    //"postinstall":"intall-app-deps",
+
     "pack":"build --dir",
     "dist":"build"
   },
@@ -55,7 +55,7 @@
       "target":"dmg",
       "identity":"CERT",
       "icon":"build/icon.icns",
-      "entitlements":"build/entitlements.mac.plist",
+      "entitlements":"build/entitlements.mac.plist"
 
     },
     "dmg":{
