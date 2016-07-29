@@ -4,7 +4,14 @@ const {dialog} = electron;
 const {ipcMain} = require('electron')
 var util = require('util')
 
-module.exports = function(win) {
+
+
+module.exports = function(win, emitter) {
+    let daemon;
+    emitter.on('daemon-ready', function(ipfs){
+        daemon = ipfs;
+
+    })
 
     const template = [
         {
@@ -25,6 +32,40 @@ module.exports = function(win) {
                     click(item, focusedWindow) {
                         var saveFile = dialog.showSaveDialog({});
                         console.log(saveFile)
+                    }
+                }
+            ]
+        },
+        {
+            label: 'IPFS',
+            submenu: [
+                {
+                    label: 'Browse',
+                    accelerator: 'CmdOrCtrl+B',
+                    click(item, focusedWindow) {
+                        daemon.id().then(function(id){
+                            console.log('ipfs id', id)
+                        })
+
+                    }
+                },
+                {
+                    label:'Upload',
+                    accelerator: 'CmdOrCtrl+U',
+                    click(itme, focusedWindow) {
+
+                    }
+                },
+
+            ]
+        },
+        {
+            label: 'Authorization',
+            submenu: [
+                {
+                    label: 'Sign',
+                    click(item, focusedWindow){
+
                     }
                 }
             ]

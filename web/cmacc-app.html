@@ -21,6 +21,8 @@
 <link rel="import" href="../bower_components/cmacc-elements/cmacc-sidebar.html">
 <link rel="import" href="../bower_components/cmacc-elements/cmacc-dialog.html">
 
+<link rel="import" href="../bower_components/paper-toast/paper-toast.html">
+
 <dom-module id="cmacc-app">
 
     <style>
@@ -54,11 +56,19 @@
             background: #FFF;
         }
 
+
+        #daemon {
+            --paper-toast-background-color:#4285f4;
+            --paper-toast-color: white;
+        }
+
     </style>
 
     <template>
         <cmacc-ast id="ast" ast="{{ast}}"></cmacc-ast>
         <cmacc-dialog id="dialog" ast="{{ast}}"></cmacc-dialog>
+
+        <paper-toast id="daemon" text="ipfs connected"></paper-toast>
 
         <app-header-layout fullbleed>
 
@@ -125,6 +135,10 @@
                 ipc.on('open-document',function(e, args){
                     console.log(args)
                     this.go(args[0])
+                }.bind(this), true)
+
+                ipc.on('daemon-ready', function(e, args){
+                    this.$.daemon.open();
                 }.bind(this), true)
 
 

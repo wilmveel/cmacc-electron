@@ -6,6 +6,10 @@ const {BrowserWindow} = electron;
 
 const ipfsd = require('ipfsd-ctl')
 
+const EventEmitter = require('events')
+
+let emitter = new EventEmitter()
+
 require('module').globalPaths.push(__dirname);
 console.log('dirname',__dirname)
 // Keep a global reference of the window object, if you don't, the window will
@@ -27,7 +31,7 @@ function createWindow() {
     win.webContents.openDevTools();
 
     const menu = require('./src/menu')
-    menu(win);
+    menu(win, emitter);
 
     // Emitted when the window is closed.
     win.on('closed', () => {
@@ -41,6 +45,9 @@ function createWindow() {
 function createDaemon(){
     ipfsd.disposableApi(function(err, ipfs){
         daemon = ipfs;
+
+        win.webContents.send('daemon-ready',ipfs)
+        emitter.emit('daemon-ready', ipfs);
     })
 }
 
