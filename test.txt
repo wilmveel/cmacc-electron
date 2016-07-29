@@ -1,0 +1,5 @@
+{ key: 'valuationCap',
+  ref: undefined,
+  val: '$1,000,000',
+  loc: 'valuationCap',
+  type: 'string' }

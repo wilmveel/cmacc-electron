@@ -22,7 +22,7 @@ module.exports = function(win, emitter) {
                     accelerator: 'CmdOrCtrl+O',
                     click(item, focusedWindow) {
                         var openFile = dialog.showOpenDialog({properties: ['openFile', 'openDirectory', 'multiSelections']});
-                        console.log('IPC', util.inspect(ipcMain, null, true))
+                        //console.log('IPC', util.inspect(ipcMain, null, true))
                         win.webContents.send('open-document', openFile)
                     }
                 },
@@ -31,7 +31,8 @@ module.exports = function(win, emitter) {
                     accelerator: 'CmdOrCtrl+S',
                     click(item, focusedWindow) {
                         var saveFile = dialog.showSaveDialog({});
-                        console.log(saveFile)
+                        //console.log(saveFile)
+                        win.webContents.send('save-document', saveFile);
                     }
                 }
             ]
@@ -64,6 +65,12 @@ module.exports = function(win, emitter) {
             submenu: [
                 {
                     label: 'Sign',
+                    click(item, focusedWindow){
+
+                    }
+                },
+                {
+                    label: 'Manage identity',
                     click(item, focusedWindow){
 
                     }

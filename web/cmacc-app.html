@@ -69,7 +69,8 @@
         <cmacc-dialog id="dialog" ast="{{ast}}"></cmacc-dialog>
 
         <paper-toast id="daemon" text="ipfs connected"></paper-toast>
-
+<div>
+    <cmacc-sidebar ast="{{ast}}"></cmacc-sidebar>
         <app-header-layout fullbleed>
 
             <app-header>
@@ -82,6 +83,9 @@
                     <paper-tab>Source</paper-tab>
                 </paper-tabs>
             </app-header>
+
+
+
 
 
             <iron-pages selected="{{page}}">
@@ -103,9 +107,8 @@
                 </div>
             </iron-pages>
 
-
         </app-header-layout>
-
+    </div>
     </template>
 
     <script>
@@ -141,6 +144,14 @@
                     this.$.daemon.open();
                 }.bind(this), true)
 
+                ipc.on('save-document', function(e, args){
+
+                    this.save(args)
+                }.bind(this), true)
+
+                ipc.on('publish', function(e, args){
+
+                }.bind(this), true)
 
                 this.page = 0;
                 this.files = [
@@ -167,6 +178,13 @@
                 //console.log(e.model.item);
                 this.$.ast.file = e;//__dirname + '/node_modules/cmacc-docs/doc/acme/angel-round/safe_robinson_v3.md';
                 //document.getElementById('left').toggle();
+            },
+            save: function (loc) {
+
+                util = require('util')
+                require('fs').writeFile(loc,util.inspect( this.ast.variables[0], false, null), function(){
+
+                })
             },
             getDoc: function () {
                 var url = window.location.href;

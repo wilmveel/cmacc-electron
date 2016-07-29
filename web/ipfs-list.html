@@ -1,0 +1,38 @@
+<!-- Imports polymer -->
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+
+
+<dom-module id="ipfs-list">
+    <style>
+
+    </style>
+
+    <template>
+
+    </template>
+
+    <script>
+        Polymer({
+            is: 'ipfsList',
+            properties:{
+
+            },
+            ready:function(){
+                var ipc = require('electron').ipcRenderer;
+
+                ipc.on('open-document',function(e, args){
+                    console.log(args)
+                    this.fill(args[0])
+                }.bind(this), true)
+            },
+            fill:function(ipfs){
+
+            }
+
+        })
+    </script>
+</dom-module>
