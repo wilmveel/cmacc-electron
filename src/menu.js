@@ -5,7 +5,18 @@ const {ipcMain} = require('electron')
 var util = require('util')
 const fs = require('fs')
 
+function recDirectorySearch(dircontent, dirname){
+    for(var i = 0; i < dircontent.length; i++ ){
+        var cdir =  dirname + '/' + dircontent[i]
+        if(fs.lstatSync(cdir).isDirectory()){
+            var res = fs.readdirSync(cdir)
 
+                console.log(res)
+                recDirectorySearch(res, cdir)
+
+        }
+    }
+}
 
 module.exports = function(win, emitter) {
     let daemon;
@@ -32,9 +43,20 @@ module.exports = function(win, emitter) {
                     click(item, focusedWindow) {
                         var openFile = dialog.showOpenDialog({properties: ['openFile', 'openDirectory', 'multiSelections']});
                         //console.log('IPC', util.inspect(ipcMain, null, true))
-                        openFile = 'file://' + openFile;
-                        console.log('opening',openFile)
-                        win.webContents.send('open-document', openFile)
+                        console.log(openFile[0])
+
+                        if(fs.lstatSync(openFile[0]).isDirectory()){
+
+                            fs.readdir(openFile[0], (err, res) => {
+                                console.log(res)
+                                recDirectorySearch(res, openFile[0])
+                            })
+                        } else {
+
+                            openFile = 'file://' + openFile;
+                            console.log('opening', openFile)
+                            win.webContents.send('open-document', openFile)
+                        }
                     }
                 },
                 {
