@@ -33,6 +33,9 @@ function createWindow() {
     const menu = require('./src/menu')
     menu(win, emitter);
 
+    const ipfsworker = require('./src/ipfsworker')
+    ipfsworker(win, emitter)
+
     // Emitted when the window is closed.
     win.on('closed', () => {
         // Dereference the window object, usually you would store windows

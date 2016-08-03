@@ -8,9 +8,8 @@
     "prestart": "./node_modules/.bin/webpack",
     "start": "./node_modules/.bin/electron .",
     "postinstall": "bower install",
-
-    "pack":"build --dir",
-    "dist":"build"
+    "pack": "build --dir",
+    "dist": "build"
   },
   "repository": {
     "type": "git",
@@ -30,6 +29,7 @@
     "cmacc-docs": "wilmveel/cmacc-docs",
     "ipfs-api": "^6.0.3",
     "ipfsd-ctl": "^0.14.0",
+    "request": "^2.74.0",
     "webpack": "^1.13.1"
   },
   "devDependencies": {
@@ -37,30 +37,29 @@
     "electron-prebuilt": "^1.2.8"
   },
   "homepage": "https://github.com/wilmveel/cmacc-electron#readme",
-
-
-  "build":{
-    "productName":"Common Accord Desktop",
-    "appId":"",
-    "app-category-type":"public.app-category.business",
-    "win":{
-      "iconUrl":"http://www.commonaccord.org/File/cmacc-trans.png",
-      "target":"squirrel",
-      "loadingGif":"build/install-spinner.gif",
-      "msi":true,
-      "signingHashAlgorithms":["sha1","sha2"],
-      "icon":"build/icon.ico"
+  "build": {
+    "productName": "Common Accord Desktop",
+    "appId": "",
+    "app-category-type": "public.app-category.business",
+    "win": {
+      "iconUrl": "http://www.commonaccord.org/File/cmacc-trans.png",
+      "target": "squirrel",
+      "loadingGif": "build/install-spinner.gif",
+      "msi": true,
+      "signingHashAlgorithms": [
+        "sha1",
+        "sha2"
+      ],
+      "icon": "build/icon.ico"
     },
-    "mac":{
-      "target":"dmg",
-      "identity":"CERT",
-      "icon":"build/icon.icns",
-      "entitlements":"build/entitlements.mac.plist"
-
+    "mac": {
+      "target": "dmg",
+      "identity": "CERT",
+      "icon": "build/icon.icns",
+      "entitlements": "build/entitlements.mac.plist"
     },
-    "dmg":{
-      "background":"build/background.png"
+    "dmg": {
+      "background": "build/background.png"
     }
-
   }
 }

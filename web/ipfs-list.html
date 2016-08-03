@@ -12,6 +12,11 @@
     </style>
 
     <template>
+        <template is="dom-repeat">
+            <paper-item>
+
+            </paper-item>
+        </template>
 
     </template>
 
@@ -19,7 +24,9 @@
         Polymer({
             is: 'ipfsList',
             properties:{
-
+                pairs: {
+                    type:Object
+                }
             },
             ready:function(){
                 var ipc = require('electron').ipcRenderer;

@@ -119,6 +119,13 @@
                 ast: {
                     type: Object,
                     observer: 'refresh'
+                },
+                localState:{
+                    type: Object,
+                    value:{
+                        currentDir:null
+                    }
+
                 }
             },
 
@@ -135,9 +142,15 @@
 
                 var ipc = require('electron').ipcRenderer;
 
+                ipc.on('new-document', function(){
+                    this.go("hello world");
+
+                }.bind(this), true)
+
                 ipc.on('open-document',function(e, args){
-                    console.log(args)
-                    this.go(args[0])
+                    this.localState.currentDir = args
+
+                    this.go(args)
                 }.bind(this), true)
 
                 ipc.on('daemon-ready', function(e, args){
@@ -145,11 +158,20 @@
                 }.bind(this), true)
 
                 ipc.on('save-document', function(e, args){
+                    this.localState.currentDir = args;
+                    cmacc.serialize(this.ast, function(err, text){
+                        util = require('util')
+                        require('fs').writeFile(args,text, function(){
 
-                    this.save(args)
+                        })
+                    })
+
                 }.bind(this), true)
 
-                ipc.on('publish', function(e, args){
+                ipc.on('publish', function(){
+                    console.log(this.localState.currentDir)
+
+                    ipc.send('ipfs-add', this.localState.currentDir )
 
                 }.bind(this), true)
 
@@ -174,9 +196,10 @@
             refresh: function () {
                 console.log('refresh');
             },
-            go: function (e) {
+            go: function (args) {
+                console.log('go', args)
                 //console.log(e.model.item);
-                this.$.ast.file = e;//__dirname + '/node_modules/cmacc-docs/doc/acme/angel-round/safe_robinson_v3.md';
+                this.$.ast.file = args;//__dirname + '/node_modules/cmacc-docs/doc/acme/angel-round/safe_robinson_v3.md';
                 //document.getElementById('left').toggle();
             },
             save: function (loc) {

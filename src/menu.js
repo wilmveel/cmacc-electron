@@ -3,6 +3,7 @@ const {Menu, MenuItem} = electron;
 const {dialog} = electron;
 const {ipcMain} = require('electron')
 var util = require('util')
+const fs = require('fs')
 
 
 
@@ -18,11 +19,21 @@ module.exports = function(win, emitter) {
             label: 'File',
             submenu: [
                 {
+                    label: 'New',
+                    accelerator: 'CmdOrCtrl+N',
+                    click(item, focusedWindow){
+
+                        win.webContents.send('new-document')
+                    }
+                },
+                {
                     label: 'Open',
                     accelerator: 'CmdOrCtrl+O',
                     click(item, focusedWindow) {
                         var openFile = dialog.showOpenDialog({properties: ['openFile', 'openDirectory', 'multiSelections']});
                         //console.log('IPC', util.inspect(ipcMain, null, true))
+                        openFile = 'file://' + openFile;
+                        console.log('opening',openFile)
                         win.webContents.send('open-document', openFile)
                     }
                 },
@@ -51,9 +62,11 @@ module.exports = function(win, emitter) {
                     }
                 },
                 {
-                    label:'Upload',
-                    accelerator: 'CmdOrCtrl+U',
-                    click(itme, focusedWindow) {
+                    label:'Publish',
+                    accelerator: 'CmdOrCtrl+P',
+                    click(item, focusedWindow) {
+                        win.webContents.send('publish')
+
 
                     }
                 },
