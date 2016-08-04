@@ -47,10 +47,8 @@ module.exports = function(win, emitter) {
 
                         if(fs.lstatSync(openFile[0]).isDirectory()){
 
-                            fs.readdir(openFile[0], (err, res) => {
-                                console.log(res)
-                                recDirectorySearch(res, openFile[0])
-                            })
+                            win.webContents.send('open-directory', openFile)
+
                         } else {
 
                             openFile = 'file://' + openFile;

@@ -25,10 +25,12 @@
     "url": "https://github.com/wilmveel/cmacc-electron/issues"
   },
   "dependencies": {
+    "async": "^2.0.1",
     "cmacc-compiler": "wilmveel/cmacc-compiler",
     "cmacc-docs": "wilmveel/cmacc-docs",
     "ipfs-api": "^6.0.3",
     "ipfsd-ctl": "^0.14.0",
+    "node-dir": "^0.1.15",
     "request": "^2.74.0",
     "webpack": "^1.13.1"
   },
