@@ -3,6 +3,8 @@ const electron = require('electron');
 
 const path = require('path')
 
+const fs = require('fs')
+
 const {dialog} = electron;
 
 const request = require('request')
@@ -32,7 +34,10 @@ module.exports = function(win, emitter){
             options, (res) => {
             if (res === 1) {
                 console.log('address', address)
-                daemon.add(address)
+                daemon.add(
+                    [
+                        {path:'/lala/test.txt' , content: fs.createReadStream(address)}
+                    ])
                     .then((hash) => {console.log(hash)
                         var options = {
                             method:"POST",
