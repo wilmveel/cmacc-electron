@@ -1,0 +1,80 @@
+<link rel="import" href="../bower_components/cmacc-elements/cmacc-app.html">
+
+
+<dom-module id="common-accord">
+    <style>
+
+    </style>
+
+    <template>
+        <paper-toast id="daemon" text="ipfs connected"></paper-toast>
+
+        <cmacc-app ast="{{ast}}" files="{{files}}"></cmacc-app>
+    </template>
+
+    <script>
+        Polymer({
+            is:'common-accord',
+            properties:{
+                currentDir:{
+                    type:String
+                },
+                files:{
+                    type:Array
+                },
+                ast:{
+                    type:Object
+                }
+            },
+            ready:function(){
+                var ipc = require('electron').ipcRenderer;
+                var path = require('path')
+
+                ipc.on('new-document', function(){
+                    this.go("hello world");
+
+                }.bind(this), true)
+
+                ipc.on('open-document',function(e, args){
+                    this.currentDir = args
+                    this.go(args)
+                }.bind(this), true)
+
+                ipc.on('open-directory',function(e, args){
+                    console.log('open ',args)
+                    this.currentDir = args.directory
+
+                    let filez = [];
+                    args.files.forEach(function(file){
+
+                        var sub = path.basename(args.directory) + '/'+ path.relative(args.directory, file)
+                        filez.push(sub)
+                    })
+
+                    this.set('files', filez)
+                }.bind(this), true)
+
+                ipc.on('daemon-ready', function(e, args){
+                    this.$.daemon.open();
+                }.bind(this), true)
+
+                ipc.on('save-document', function(e, args){
+                    this.localState.currentDir = args;
+                    cmacc.serialize(this.ast, function(err, text){
+                        util = require('util')
+                        require('fs').writeFile(args,text, function(){
+
+                        })
+                    })
+                }.bind(this), true)
+
+                ipc.on('publish', function(){
+                    ipc.send('ipfs-add', this.currentDir )
+
+                }.bind(this), true)
+
+            }
+        })
+    </script>
+
+</dom-module>

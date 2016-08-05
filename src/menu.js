@@ -5,6 +5,9 @@ const {ipcMain} = require('electron')
 var util = require('util')
 const fs = require('fs')
 
+
+const nodeDir = require('node-dir')
+
 function recDirectorySearch(dircontent, dirname){
     for(var i = 0; i < dircontent.length; i++ ){
         var cdir =  dirname + '/' + dircontent[i]
@@ -41,13 +44,18 @@ module.exports = function(win, emitter) {
                     label: 'Open',
                     accelerator: 'CmdOrCtrl+O',
                     click(item, focusedWindow) {
-                        var openFile = dialog.showOpenDialog({properties: ['openFile', 'openDirectory', 'multiSelections']});
+                        var openFile = dialog.showOpenDialog({properties: ['openFile', 'openDirectory']});
                         //console.log('IPC', util.inspect(ipcMain, null, true))
                         console.log(openFile[0])
 
                         if(fs.lstatSync(openFile[0]).isDirectory()){
+                            nodeDir.paths(openFile[0], (err, path) => {
 
-                            win.webContents.send('open-directory', openFile)
+
+                                win.webContents.send('open-directory', {directory:openFile[0],files:path.files})
+                            })
+
+
 
                         } else {
 
@@ -85,9 +93,8 @@ module.exports = function(win, emitter) {
                     label:'Publish',
                     accelerator: 'CmdOrCtrl+P',
                     click(item, focusedWindow) {
+
                         win.webContents.send('publish')
-
-
                     }
                 },
 

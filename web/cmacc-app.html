@@ -5,6 +5,7 @@
 <link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
 <link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
 <link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
 
 
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
@@ -69,46 +70,55 @@
         <cmacc-dialog id="dialog" ast="{{ast}}"></cmacc-dialog>
 
         <paper-toast id="daemon" text="ipfs connected"></paper-toast>
-<div>
-    <cmacc-sidebar ast="{{ast}}"></cmacc-sidebar>
-        <app-header-layout fullbleed>
 
-            <app-header>
-                <app-toolbar>
-                    <div main-title>Common Accord</div>
-
-                </app-toolbar>
-                <paper-tabs selected="{{page}}">
-                    <paper-tab>Document</paper-tab>
-                    <paper-tab>Source</paper-tab>
-                </paper-tabs>
-            </app-header>
+        <app-scrollpos-control selected="{{page}}"></app-scrollpos-control>
 
 
+        <div>
+
+                <app-drawer-layout fullbleed>
+
+                    <app-drawer algin="start" opened>
+                        <cmacc-sidebar ast="{{ast}}"></cmacc-sidebar>
+                    </app-drawer>
+                    <app-header-layout>
+                    <app-header>
+                        <app-toolbar>
+                            <div main-title>Common Accord</div>
+
+                        </app-toolbar>
+                        <paper-tabs selected="{{page}}">
+                            <paper-tab>Document</paper-tab>
+                            <paper-tab>Source</paper-tab>
+                        </paper-tabs>
+                    </app-header>
 
 
 
-            <iron-pages selected="{{page}}">
-                <div id="container">
-                    <div id="wrapper">
-                        <paper-material id="page" elevation="1">
-                            <cmacc-document ast="{{ast}}"></cmacc-document>
-                        </paper-material>
+
+
+                <iron-pages selected="{{page}}">
+                    <div id="container">
+                        <div id="wrapper">
+                            <paper-material id="page" elevation="1">
+                                <cmacc-document ast="{{ast}}"></cmacc-document>
+                            </paper-material>
+                        </div>
+
                     </div>
+                    <div id="container">
+                        <div id="wrapper">
+                            <paper-material id="page" elevation="1">
+                                <cmacc-source ast="{{ast}}"></cmacc-source>
+                            </paper-material>
+                        </div>
 
-                </div>
-                <div id="container">
-                    <div id="wrapper">
-                        <paper-material id="page" elevation="1">
-                            <cmacc-source ast="{{ast}}"></cmacc-source>
-                        </paper-material>
                     </div>
+                </iron-pages>
+                    </app-header-layout>
 
-                </div>
-            </iron-pages>
-
-        </app-header-layout>
-    </div>
+            </app-drawer-layout>
+        </div>
     </template>
 
     <script>
@@ -126,6 +136,9 @@
                         currentDir:null
                     }
 
+                },
+                files:{
+                    type: Array,
                 }
             },
 
@@ -155,7 +168,8 @@
 
                 ipc.on('open-directory',function(e, args){
                     console.log(args)
-                    this.localState.currentDir = args[0]
+                    this.localState.currentDir = args.directory
+                    this.files = args.files
                 }.bind(this), true)
 
                 ipc.on('daemon-ready', function(e, args){
@@ -181,14 +195,7 @@
                 }.bind(this), true)
 
                 this.page = 0;
-                this.files = [
-                    __dirname +'/node_modules/cmacc-docs/doc/test.md',
-                    __dirname + '/node_modules/cmacc-docs/doc/marc/HelloWorld.md',
-                    __dirname + '/node_modules/cmacc-docs/doc/marc/HelloWorldOverwrite.md',
-                    __dirname + '/node_modules/cmacc-docs/doc/acme/angel-round/SAFE_Robinson.md',
-                    __dirname + '/node_modules/cmacc-docs/doc/acme/angel-round/SAFE_Robinson_v2.md',
-                    __dirname + '/node_modules/cmacc-docs/doc/acme/angel-round/safe_robinson_v3.md'
-                ]
+
 
             },
 //            attached: function () {
