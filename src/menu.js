@@ -4,7 +4,7 @@ const {dialog} = electron;
 const {ipcMain} = require('electron')
 var util = require('util')
 const fs = require('fs')
-
+const path = require('path')
 
 const nodeDir = require('node-dir')
 
@@ -59,9 +59,9 @@ module.exports = function(win, emitter) {
 
                         } else {
 
-                            openFile = 'file://' + openFile;
+                           openFile = openFile[0]
                             console.log('opening', openFile)
-                            win.webContents.send('open-document', openFile)
+                            win.webContents.send('open-document', {directory:path.dirname(openFile), files:openFile})
                         }
                     }
                 },

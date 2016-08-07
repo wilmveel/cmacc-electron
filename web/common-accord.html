@@ -9,7 +9,7 @@
     <template>
         <paper-toast id="daemon" text="ipfs connected"></paper-toast>
 
-        <cmacc-app ast="{{ast}}" files="{{files}}"></cmacc-app>
+        <cmacc-app ast="{{ast}}" files="{{files}}" host="{{currentDir}}"></cmacc-app>
     </template>
 
     <script>
@@ -27,6 +27,19 @@
                 }
             },
             ready:function(){
+
+                this.addEventListener('electron-changed-ast', function(e, args){
+                    console.log('refresh', args)
+
+                }.bind(this), true)
+
+                this.addEventListener('electron-save', function(e){
+                    console.log('save')
+                    console.log(this.ast)
+
+                }.bind(this), true)
+
+
                 var ipc = require('electron').ipcRenderer;
                 var path = require('path')
 
@@ -36,8 +49,9 @@
                 }.bind(this), true)
 
                 ipc.on('open-document',function(e, args){
-                    this.currentDir = args
-                    this.go(args)
+                    this.currentDir = args.directory
+                    console.log('file',args)
+                    this.set('files',[(path.basename(args.directory) + '/'+ path.relative(args.directory, args.files))])
                 }.bind(this), true)
 
                 ipc.on('open-directory',function(e, args){
