@@ -5,6 +5,7 @@ const {ipcMain} = require('electron')
 var util = require('util')
 const fs = require('fs')
 const path = require('path')
+const request = require('request')
 
 const nodeDir = require('node-dir')
 
@@ -89,9 +90,16 @@ module.exports = function(win, emitter) {
                     label: 'Browse',
                     accelerator: 'CmdOrCtrl+B',
                     click(item, focusedWindow) {
-                        daemon.id().then(function(id){
-                            console.log('ipfs id', id)
-                        })
+                        var options = {
+                            method: "GET",
+                            url: 'https://cmacc-api.herokuapp.com/api/library/geo'
+                        }
+
+                       request(options, function(err, response, body ){
+                           console.log(err)
+
+
+                       })
 
                     }
                 },

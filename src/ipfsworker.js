@@ -17,27 +17,6 @@ const util = require('util')
 let topAddress;
 let daemon;
 
-let hashArray= [];
-
-
-function addToIPFS(file){
-
-    var currentPath =path.basename(topAddress) + '/' + path.relative(topAddress, file)
-
-    daemon.add(
-        [
-            {path:currentPath , content: fs.createReadStream(file)}
-        ])
-        .then((hash) => {console.log(hash)
-
-
-            hashArray.push(hash)
-
-        })
-        .catch(err => {console.log(err)})
-}
-
-
 module.exports = function(win, emitter){
 
 
@@ -109,5 +88,19 @@ module.exports = function(win, emitter){
         })
 
 
+    })
+
+    ipcMain.on('ipfs-get', function(e , arg){
+
+
+        daemon.get(arg)
+            .then(function(file){
+
+                console.log(file)
+
+            })
+            .catch(function(err){
+
+            })
     })
 }
