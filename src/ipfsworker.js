@@ -51,8 +51,8 @@ module.exports = function(win, emitter){
         console.log(address)
         const buttons = ['cancel', 'publish']
 
-        nodeDir.paths(address, (erro,path) =>{
-            const nrFiles = path.files.length;
+        nodeDir.paths(address, (erro,pathz) =>{
+            const nrFiles = pathz.files.length;
 
             const options= {
                 type:'question',
@@ -61,33 +61,46 @@ module.exports = function(win, emitter){
                 message:'publish ' + nrFiles + ' files to IPFS',
                 noLink:true,
             }
+
+
             topAddress = address;
+
+
             dialog.showMessageBox(
                 options, (res) => {
                 if (res === 1) {
                     console.log('address', address)
                     nodeDir.paths(address, (err, paths) => {
-                        console.log(paths)
-                        console.log(err)
-                        async.each(paths.files,addToIPFS,(err)=>{
-                            console.log(err)
-                            console.log("HEEEEEEEEEEEE")
+                        ipfsList = []
+                        paths.files.forEach(function(file){
+                            var currentPath = path.basename(topAddress) + '/' + path.relative(topAddress, file)
+                            ipfsList.push({path:currentPath , content: fs.createReadStream(file)});
+                        })
 
-                            let hashs = hashArray.pop()
-                            console.log('HEEEEEE', hashs)
-                                let hash = hashs.pop().Hash
+                        let rootHash;
 
-                            var options = {
-                                method:"POST",
-                                url:'https://cmacc-api.herokuapp.com/api/library/geo',
-                                body:hash,
-                                json:true
+                        daemon.add(ipfsList)
+                            .then((hash) => {
+                                console.log(hash)
+                                rootHash= hash.pop()
 
-                            }
-                            request(options, (err) => {
+                                console.log('root', rootHash)
+                               var options = {
+                                    method:"POST",
+                                    url:'https://cmacc-api.herokuapp.com/api/library/geo',
+                                    body:rootHash,
+                                    json:true
+
+                                }
+                                request(options, (err) => {
+
+                                })
 
                             })
-                        })
+                            .catch(err => {console.log(err)})
+
+
+
 
                     })
 
