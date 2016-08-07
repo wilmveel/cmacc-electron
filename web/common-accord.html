@@ -28,20 +28,21 @@
             },
             ready:function(){
 
-                this.addEventListener('electron-changed-ast', function(e, args){
-                    console.log('refresh', args)
+                var ipc = require('electron').ipcRenderer;
+                var path = require('path')
+
+                this.addEventListener('cmacc-ast-update', function(e){
+                    this.ast = e.detail
 
                 }.bind(this), true)
 
                 this.addEventListener('electron-save', function(e){
-                    console.log('save')
-                    console.log(this.ast)
+                    ipc.send('common-accord-save')
 
                 }.bind(this), true)
 
 
-                var ipc = require('electron').ipcRenderer;
-                var path = require('path')
+
 
                 ipc.on('new-document', function(){
                     this.go("hello world");
@@ -73,7 +74,7 @@
                 }.bind(this), true)
 
                 ipc.on('save-document', function(e, args){
-                    this.localState.currentDir = args;
+                    this.currentDir = args;
                     cmacc.serialize(this.ast, function(err, text){
                         util = require('util')
                         require('fs').writeFile(args,text, function(){

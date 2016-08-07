@@ -28,6 +28,12 @@ module.exports = function(win, emitter) {
 
     })
 
+    ipcMain.on('common-accord-save', function(e){
+        var saveFile = dialog.showSaveDialog({});
+
+        e.sender.send('save-document', saveFile);
+    })
+
     const template = [
         {
             label: 'File',
