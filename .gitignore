@@ -2,3 +2,5 @@ node_modules
 bower_components
 .idea
 assets
+dist
+cmacc-electron-darwin-x64

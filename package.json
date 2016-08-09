@@ -32,36 +32,45 @@
     "ipfsd-ctl": "^0.14.0",
     "node-dir": "^0.1.15",
     "request": "^2.74.0",
+    "typescript": "^1.8.10",
     "webpack": "^1.13.1"
   },
   "devDependencies": {
     "electron-builder": "^5.16.0",
+    "electron-packager": "^7.5.1",
     "electron-prebuilt": "^1.2.8"
   },
   "homepage": "https://github.com/wilmveel/cmacc-electron#readme",
   "build": {
     "productName": "Common Accord Desktop",
-    "appId": "",
+    "appId": "org.common-accord",
     "app-category-type": "public.app-category.business",
-    "win": {
-      "iconUrl": "http://www.commonaccord.org/File/cmacc-trans.png",
-      "target": "squirrel",
-      "loadingGif": "build/install-spinner.gif",
-      "msi": true,
-      "signingHashAlgorithms": [
-        "sha1",
-        "sha2"
-      ],
-      "icon": "build/icon.ico"
-    },
+    "asar":false,
     "mac": {
+      "title":"Common Accord Desktop",
       "target": "dmg",
-      "identity": "CERT",
       "icon": "build/icon.icns",
+      "icon-size":128,
+
       "entitlements": "build/entitlements.mac.plist"
     },
-    "dmg": {
-      "background": "build/background.png"
+    "dmg":{
+      "icon":"build/icon.icns",
+      "background":"build/background.png",
+      "content": [
+        {
+          "x": 410,
+          "y": 220,
+          "type": "link",
+          "path": "/Applications"
+        },
+        {
+          "x": 130,
+          "y": 220,
+          "type": "file",
+          "path": "computed path to artifact, do not specify it - will be overwritten"
+        }
+      ]
     }
   }
 }

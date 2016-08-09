@@ -26,8 +26,8 @@ module.exports = function(win, emitter){
     })
 
     ipcMain.on('ipfs-add',function(e, args) {
-        const address = args//.substring(7)
-        console.log(address)
+        const address = args.substring(7)
+        console.log('HEEEEEE',address)
         const buttons = ['cancel', 'publish']
 
         nodeDir.paths(address, (erro,pathz) =>{

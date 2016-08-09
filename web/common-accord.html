@@ -9,7 +9,7 @@
     <template>
         <paper-toast id="daemon" text="ipfs connected"></paper-toast>
 
-        <cmacc-app ast="{{ast}}" files="{{files}}" host="{{currentDir}}"></cmacc-app>
+        <cmacc-app ast="{{ast}}" files="{{files}}" base="{{currentDir}}"></cmacc-app>
     </template>
 
     <script>
@@ -23,7 +23,8 @@
                     type:Array
                 },
                 ast:{
-                    type:Object
+                    type:Object,
+                    observer:'refresh'
                 }
             },
             ready:function(){
@@ -31,12 +32,9 @@
                 var ipc = require('electron').ipcRenderer;
                 var path = require('path')
 
-                this.addEventListener('cmacc-ast-update', function(e){
-                    this.ast = e.detail
 
-                }.bind(this), true)
 
-                this.addEventListener('electron-save', function(e){
+                this.addEventListener('cmacc-save', function(e){
                     ipc.send('common-accord-save')
 
                 }.bind(this), true)
@@ -50,14 +48,14 @@
                 }.bind(this), true)
 
                 ipc.on('open-document',function(e, args){
-                    this.currentDir = args.directory
+                    this.currentDir = 'file://'+args.directory
                     console.log('file',args)
                     this.set('files',[(path.basename(args.directory) + '/'+ path.relative(args.directory, args.files))])
                 }.bind(this), true)
 
                 ipc.on('open-directory',function(e, args){
                     console.log('open ',args)
-                    this.currentDir = args.directory
+                    this.currentDir = 'file://'+args.directory
 
                     let filez = [];
                     args.files.forEach(function(file){
@@ -74,7 +72,7 @@
                 }.bind(this), true)
 
                 ipc.on('save-document', function(e, args){
-                    this.currentDir = args;
+                    //this.currentDir = args;
                     cmacc.serialize(this.ast, function(err, text){
                         util = require('util')
                         require('fs').writeFile(args,text, function(){
@@ -88,6 +86,9 @@
 
                 }.bind(this), true)
 
+            },
+            refresh:function(){
+                console.log('yeah',ast)
             }
         })
     </script>

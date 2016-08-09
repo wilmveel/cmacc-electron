@@ -17,7 +17,7 @@
   ],
 
   "dependencies": {
-    "cmacc-elements":"wilmveel/cmacc-elements#universal"
+    "cmacc-elements":"wilmveel/cmacc-elements#ui"
 
   }
 }
