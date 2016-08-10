@@ -4,7 +4,7 @@ module.exports = {
     entry: './node_modules/cmacc-compiler/src/cmacc.js',
 
     output: {
-        path: path.resolve(__dirname, "assets"),
+        path: path.resolve(__dirname + '/app', "assets"),
         filename: "bundle.js",
         library: "cmacc"
     },

@@ -6,7 +6,7 @@
   "scripts": {
     "test": "mocha",
     "prestart": "./node_modules/.bin/webpack",
-    "start": "./node_modules/.bin/electron .",
+    "start": "./node_modules/.bin/electron app/main.js",
     "postinstall": "bower install",
     "pack": "build --dir",
     "dist": "build"
@@ -28,6 +28,7 @@
     "async": "^2.0.1",
     "cmacc-compiler": "wilmveel/cmacc-compiler",
     "cmacc-docs": "wilmveel/cmacc-docs",
+    "gulp": "^3.9.1",
     "ipfs-api": "^6.0.3",
     "ipfsd-ctl": "^0.14.0",
     "node-dir": "^0.1.15",
@@ -45,19 +46,18 @@
     "productName": "Common Accord Desktop",
     "appId": "org.common-accord",
     "app-category-type": "public.app-category.business",
-    "asar":false,
+    "asar": false,
     "mac": {
-      "title":"Common Accord Desktop",
+      "title": "Common Accord Desktop",
       "target": "dmg",
       "icon": "build/icon.icns",
-      "icon-size":128,
-
+      "icon-size": 128,
       "entitlements": "build/entitlements.mac.plist"
     },
-    "dmg":{
-      "icon":"build/icon.icns",
-      "icon-size":128,
-      "background":"build/background.png",
+    "dmg": {
+      "icon": "build/icon.icns",
+      "icon-size": 128,
+      "background": "build/background.png",
       "content": [
         {
           "x": 410,
@@ -73,10 +73,9 @@
         }
       ]
     },
-    "win":{
-      "title":"Common Accord Desktop",
-      "msi":true
-
+    "win": {
+      "title": "Common Accord Desktop",
+      "msi": true
     }
   }
 }
