@@ -56,6 +56,7 @@
     },
     "dmg":{
       "icon":"build/icon.icns",
+      "icon-size":128,
       "background":"build/background.png",
       "content": [
         {
@@ -71,6 +72,11 @@
           "path": "computed path to artifact, do not specify it - will be overwritten"
         }
       ]
+    },
+    "win":{
+      "title":"Common Accord Desktop",
+      "msi":true
+
     }
   }
 }
