@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "async": "^2.0.1",
+    "browserify-zlib": "^0.1.4",
     "bs58": "^3.0.0",
     "cmacc-compiler": "wilmveel/cmacc-compiler",
     "cmacc-docs": "wilmveel/cmacc-docs",
@@ -77,7 +78,7 @@
     "win": {
       "title": "Common Accord Desktop",
       "msi": true,
-      "target" : "squirrel",
+      "target": "squirrel",
       "icon": "build/icon.ico",
       "iconUrl": "https://github.com/${u}/${p}/blob/master/build/icon.ico?raw=true"
     }
