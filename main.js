@@ -3,9 +3,9 @@ const electron = require('electron');
 const {app} = electron;
 // Module to create native browser window.
 const {BrowserWindow} = electron;
-
-const ipfsd = require('ipfsd-ctl')
-
+//TODO use a version of ipfs that will run on windows: npm install ipfs
+//const ipfsd = require('ipfsd-ctl')
+const IPFS = require('ipfs')
 const EventEmitter = require('events')
 
 let emitter = new EventEmitter()
@@ -46,12 +46,14 @@ function createWindow() {
 }
 
 function createDaemon(){
-    ipfsd.disposableApi(function(err, ipfs){
+
+    const ipfs = new IPFS()
+    //ipfsd.disposableApi(function(err, ipfs){
         daemon = ipfs;
 
         win.webContents.send('daemon-ready',ipfs)
         emitter.emit('daemon-ready', ipfs);
-    })
+    //})
 }
 
 

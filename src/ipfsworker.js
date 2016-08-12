@@ -14,6 +14,8 @@ const {dialog} = electron;
 const request = require('request')
 const util = require('util')
 
+const bs58 = require('bs58')
+
 let topAddress;
 let daemon;
 
@@ -58,16 +60,16 @@ module.exports = function(win, emitter){
 
                         let rootHash;
 
-                        daemon.add(ipfsList)
+                        daemon.files.add(ipfsList)
                             .then((hash) => {
                                 console.log(hash)
                                 rootHash= hash.pop()
 
-                                console.log('root', rootHash)
+                                console.log('root',bs58.encode(rootHash.node.multihash()).toString())
                                var options = {
                                     method:"POST",
                                     url:'https://cmacc-api.herokuapp.com/api/library/geo',
-                                    body:rootHash,
+                                    body:bs58.encode(rootHash.node.multihash()).toString(),
                                     json:true
 
                                 }
