@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "description": "electron app cmacc",
   "main": "main.js",
+  "email" : "info@common-accord.org",
+  "website" : "http://common-accord.org",
   "scripts": {
     "test": "mocha",
     "prestart": "./node_modules/.bin/webpack",
