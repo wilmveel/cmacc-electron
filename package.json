@@ -9,7 +9,8 @@
     "start": "./node_modules/.bin/electron .",
     "postinstall": "./node_modules/.bin/bower install",
     "pack": "build --dir",
-    "dist": "build"
+    "dist": "build",
+    "release": "build"
   },
   "repository": {
     "type": "git",
