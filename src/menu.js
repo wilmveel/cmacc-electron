@@ -73,8 +73,15 @@ module.exports = function(win, emitter) {
                     }
                 },
                 {
-                    label: 'Save',
+                    label:'Save',
                     accelerator: 'CmdOrCtrl+S',
+                    click(itme, focusedWindow){
+                        win.webContents.send('save-current')
+                    }
+                },
+                {
+                    label: 'Save As',
+
                     click(item, focusedWindow) {
                         var saveFile = dialog.showSaveDialog({});
                         //console.log(saveFile)

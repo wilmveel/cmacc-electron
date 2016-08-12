@@ -9,7 +9,7 @@
     <template>
         <paper-toast id="daemon" text="ipfs connected"></paper-toast>
 
-        <cmacc-app ast="{{ast}}" files="{{files}}" base="{{currentDir}}"></cmacc-app>
+        <cmacc-app ast="{{ast}}" files="{{files}}" base="{{currentDir}}" file="{{file}}"></cmacc-app>
     </template>
 
     <script>
@@ -25,6 +25,9 @@
                 ast:{
                     type:Object,
                     observer:'refresh'
+                },
+                file:{
+                    type:String
                 }
             },
             ready:function(){
@@ -69,6 +72,17 @@
 
                 ipc.on('daemon-ready', function(e, args){
                     this.$.daemon.open();
+                }.bind(this), true)
+
+                ipc.on('save-current', function(e){
+
+                    cmacc.serialize(this.ast, function(err, text){
+                        console.log(this.file.substring(7))
+                        console.log(text)
+                        require('fs').writeFile(this.file.substring(7),text , function(err){
+                            console.log(err)
+                        })
+                    }.bind(this))
                 }.bind(this), true)
 
                 ipc.on('save-document', function(e, args){
