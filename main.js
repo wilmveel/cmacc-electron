@@ -26,7 +26,9 @@ function createWindow() {
     win.loadURL(`file://${__dirname}/index.html`);
 
     // Open the DevTools.
-    win.webContents.openDevTools();
+
+
+
 
     const menu = require('./src/menu')
     menu(win, emitter);

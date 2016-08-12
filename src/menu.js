@@ -130,6 +130,19 @@ module.exports = function(win, emitter) {
                     }
                 }
             ]
+        },
+        {
+            label: 'Dev',
+            submenu: [
+                {
+                    label: 'devTools',
+                    click(item, focusedWindow){
+                        win.webContents.openDevTools();
+                    }
+                }
+
+
+            ]
         }
     ];
 
