@@ -5,3 +5,7 @@ assets
 dist
 cmacc-electron-darwin-x64
 commonaccord-win32-x64
+
+.DS_Store
+cmacc-electron-1.0.0.tgz
+npm-debug.log
