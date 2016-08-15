@@ -81,7 +81,7 @@
     },
     "win": {
       "title": "Common Accord Desktop",
-      "msi": true,
+      "msi": false,
       "target": "squirrel",
       "icon": "build/icon.ico",
       "iconUrl": "https://github.com/${u}/${p}/blob/master/build/icon.ico?raw=true"
