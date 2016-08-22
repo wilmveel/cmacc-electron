@@ -79,7 +79,8 @@
                     cmacc.serialize(this.ast, function(err, text){
                         console.log(this.file.substring(7))
                         console.log(text)
-                        require('fs').writeFile(this.file.substring(7),text , function(err){
+                        var dir = path.relative(path.dirname(location.pathname), this.file.substring(7))
+                        require('fs').writeFile(dir,text , function(err){
                             console.log(err)
                         })
                     }.bind(this))
