@@ -27,4 +27,8 @@ build_script:
   - npm --version
   - npm run dist
 
+artifacts:
+  - path: '**\*.exe'
+  - name: Common Accord Desktop
+
 test: off
