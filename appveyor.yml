@@ -29,6 +29,6 @@ build_script:
 
 artifacts:
   - path: '**\*.exe'
-  - name: Common Accord Desktop
+    name: Common Accord Desktop
 
 test: off
