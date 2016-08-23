@@ -28,7 +28,7 @@ build_script:
   - npm run dist
 
 artifacts:
-  - path: '**\*.exe'
+  - path: 'dist\win\Common Accord Desktop Setup 1.0.0.exe'
     name: Common Accord Desktop
 
 test: off
