@@ -53,7 +53,7 @@ module.exports = function(win, emitter) {
                     click(item, focusedWindow) {
                         var openFile = dialog.showOpenDialog({properties: ['openFile', 'openDirectory']});
                         //console.log('IPC', util.inspect(ipcMain, null, true))
-                        console.log(openFile[0])
+
                         if(openFile) {
 
                             if (fs.lstatSync(openFile[0]).isDirectory()) {
