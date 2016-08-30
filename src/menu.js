@@ -54,21 +54,25 @@ module.exports = function(win, emitter) {
                         var openFile = dialog.showOpenDialog({properties: ['openFile', 'openDirectory']});
                         //console.log('IPC', util.inspect(ipcMain, null, true))
                         console.log(openFile[0])
+                        if(openFile) {
 
-                        if(fs.lstatSync(openFile[0]).isDirectory()){
-                            nodeDir.paths(openFile[0], (err, path) => {
-
-
-                                win.webContents.send('open-directory', {directory:openFile[0],files:path.files})
-                            })
+                            if (fs.lstatSync(openFile[0]).isDirectory()) {
+                                nodeDir.paths(openFile[0], (err, path) => {
 
 
+                                    win.webContents.send('open-directory', {directory: openFile[0], files: path.files})
+                                })
 
-                        } else {
 
-                           openFile = openFile[0]
-                            console.log('opening', openFile)
-                            win.webContents.send('open-document', {directory:path.dirname(openFile), files:openFile})
+                            } else {
+
+                                openFile = openFile[0]
+                                console.log('opening', openFile)
+                                win.webContents.send('open-document', {
+                                    directory: path.dirname(openFile),
+                                    files: openFile
+                                })
+                            }
                         }
                     }
                 },
@@ -85,7 +89,9 @@ module.exports = function(win, emitter) {
                     click(item, focusedWindow) {
                         var saveFile = dialog.showSaveDialog({});
                         //console.log(saveFile)
-                        win.webContents.send('save-document', saveFile);
+                        if(saveFile) {
+                            win.webContents.send('save-document', saveFile);
+                        }
                     }
                 }
             ]
