@@ -51,12 +51,12 @@
                 }.bind(this), true)
 
                 ipc.on('open-document',function(e, args){
-                    this.ast = {}
+                    this.clean(function(){
+                        this.currentDir = 'file://'+args.directory
+                        this.set('files',[(path.basename(args.directory) + '/'+ path.relative(args.directory, args.files))])
 
-                    this.currentDir = 'file://'+args.directory
+                    }.bind(this))
 
-
-                    this.set('files',[(path.basename(args.directory) + '/'+ path.relative(args.directory, args.files))])
                 }.bind(this), true)
 
                 ipc.on('open-directory',function(e, args){
