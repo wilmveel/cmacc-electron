@@ -51,13 +51,18 @@
                 }.bind(this), true)
 
                 ipc.on('open-document',function(e, args){
+                    this.ast = {}
+
                     this.currentDir = 'file://'+args.directory
-                    console.log('file',args)
+
+
                     this.set('files',[(path.basename(args.directory) + '/'+ path.relative(args.directory, args.files))])
                 }.bind(this), true)
 
                 ipc.on('open-directory',function(e, args){
-                    console.log('open ',args)
+
+
+                    this.clean(function(){
                     this.currentDir = 'file://'+args.directory
 
                     let filez = [];
@@ -68,6 +73,7 @@
                     })
 
                     this.set('files', filez)
+                    }.bind(this))
                 }.bind(this), true)
 
                 ipc.on('daemon-ready', function(e, args){
@@ -103,7 +109,22 @@
 
             },
             refresh:function(){
-                console.log('yeah',ast)
+                console.log('yeah',this.ast)
+            },
+            clean: function(cb){
+                console.log('THISAST', this.ast)
+                if (this.ast !== undefined){
+                    window.cmacc.compose(this.ast.file, null, function (err, ast) {
+
+                        this.ast = ast;
+                        console.log("THISAST2", this.ast)
+                        cb()
+                    }.bind(this))
+
+                }
+                else cb()
+
+
             }
         })
     </script>
