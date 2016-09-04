@@ -110,6 +110,7 @@
             },
             refresh:function(){
                 console.log('yeah',this.ast)
+                document.title = "Common Accord Desktop - " + require('path').basename(this.ast.file)
             },
             clean: function(cb){
                 console.log('THISAST', this.ast)
