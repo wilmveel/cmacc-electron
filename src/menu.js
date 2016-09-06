@@ -43,8 +43,18 @@ module.exports = function(win, emitter) {
                     label: 'New',
                     accelerator: 'CmdOrCtrl+N',
                     click(item, focusedWindow){
+                        var newFile = dialog.showSaveDialog({})
+                        if(newFile){
+                            fs.writeFile(newFile, "", function(err){
+                                var newDir = path.dirname(newFile)
+                                nodeDir.paths(newDir, (err, path) => {
+                                    console.log("NewDir",newDir)
 
-                        win.webContents.send('new-document')
+                                    win.webContents.send('open-directory', {directory: newDir, files: path.files})
+                                })
+                            })
+                        }
+
                     }
                 },
                 {

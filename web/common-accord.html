@@ -45,8 +45,21 @@
 
 
 
-                ipc.on('new-document', function(){
-                    this.go("hello world");
+                ipc.on('new-document', function(e, args){
+
+
+                    this.clean(function(){
+                        this.currentDir = 'file://'+args.directory
+
+                        let filez = [];
+                        args.files.forEach(function(file){
+
+                            var sub = path.basename(args.directory) + '/'+ path.relative(args.directory, file)
+                            filez.push(sub)
+                        })
+
+                        this.set('files', filez)
+                    }.bind(this))
 
                 }.bind(this), true)
 
