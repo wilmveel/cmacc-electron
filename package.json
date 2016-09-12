@@ -1,6 +1,6 @@
 {
   "name": "cmacc_electron",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "electron app cmacc",
   "main": "main.js",
   "scripts": {
