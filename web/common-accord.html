@@ -28,7 +28,7 @@
                 },
                 file:{
                     type:String,
-                    observer:'watch'
+                    //observer:'watch'
                 }
             },
             ready:function(){
@@ -66,6 +66,16 @@
 
                 ipc.on('open-document',function(e, args){
                     this.clean(function(){
+
+                        require('fs').watch(args.directory, function(eventType, filename){
+                            if(filename){
+                                window.cmacc.compose(this.ast.file, null, function (err, ast) {
+
+                                    this.ast = ast;
+                                }.bind(this))
+                            }
+                        }.bind(this))
+
                         this.currentDir = 'file://'+args.directory
                         this.set('files',[(path.basename(args.directory) + '/'+ path.relative(args.directory, args.files))])
 
@@ -77,16 +87,26 @@
 
 
                     this.clean(function(){
-                    this.currentDir = 'file://'+args.directory
 
-                    let filez = [];
-                    args.files.forEach(function(file){
+                        require('fs').watch(args.directory, function(eventType, filename){
+                            if(filename){
+                                window.cmacc.compose(this.ast.file, null, function (err, ast) {
 
-                        var sub = path.basename(args.directory) + '/'+ path.relative(args.directory, file)
-                        filez.push(sub)
-                    })
+                                    this.ast = ast;
+                                }.bind(this))
+                            }
+                        }.bind(this))
 
-                    this.set('files', filez)
+                        this.currentDir = 'file://'+args.directory
+
+                        let filez = [];
+                        args.files.forEach(function(file){
+
+                            var sub = path.basename(args.directory) + '/'+ path.relative(args.directory, file)
+                            filez.push(sub)
+                        })
+
+                        this.set('files', filez)
                     }.bind(this))
                 }.bind(this), true)
 
@@ -141,16 +161,16 @@
 
 
             },
-            watch: function(){
-                require('fs').watch(this.file.substring(7), function(eventType, filename){
-                    if(filename){
-                        window.cmacc.compose(this.ast.file, null, function (err, ast) {
-
-                            this.ast = ast;
-                        }.bind(this))
-                    }
-                }.bind(this))
-            }
+//            watch: function(){
+//                require('fs').watch(this.file.substring(7), function(eventType, filename){
+//                    if(filename){
+//                        window.cmacc.compose(this.ast.file, null, function (err, ast) {
+//
+//                            this.ast = ast;
+//                        }.bind(this))
+//                    }
+//                }.bind(this))
+//            }
         })
     </script>
 
