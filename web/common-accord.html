@@ -27,7 +27,8 @@
                     observer:'refresh'
                 },
                 file:{
-                    type:String
+                    type:String,
+                    observer:'watch'
                 }
             },
             ready:function(){
@@ -139,6 +140,16 @@
                 else cb()
 
 
+            },
+            watch: function(){
+                require('fs').watch(this.file.substring(7), function(eventType, filename){
+                    if(filename){
+                        window.cmacc.compose(this.ast.file, null, function (err, ast) {
+
+                            this.ast = ast;
+                        }.bind(this))
+                    }
+                }.bind(this))
             }
         })
     </script>
