@@ -14,61 +14,58 @@
 
     <script>
         Polymer({
-            is:'common-accord',
-            properties:{
-                currentDir:{
-                    type:String
+            is: 'common-accord',
+            properties: {
+                currentDir: {
+                    type: String
                 },
-                files:{
-                    type:Array
+                files: {
+                    type: Array
                 },
-                ast:{
-                    type:Object,
-                    observer:'refresh'
+                ast: {
+                    type: Object,
+                    observer: 'refresh'
                 },
-                file:{
-                    type:String,
+                file: {
+                    type: String,
                     //observer:'watch'
                 }
             },
-            ready:function(){
+            ready: function () {
 
                 var ipc = require('electron').ipcRenderer;
                 var path = require('path')
 
-
-
-                this.addEventListener('cmacc-save', function(e){
+                this.addEventListener('cmacc-save', function (e) {
                     ipc.send('common-accord-save')
-
                 }.bind(this), true)
 
+                ipc.on('new-document', function (e, args) {
 
 
+                    this.clean(function () {
 
-                ipc.on('new-document', function(e, args){
-
-
-                    this.clean(function(){
-                        this.currentDir = 'file://'+args.directory
+                        this.currentDir = 'file://' + args.directory;
 
                         let filez = [];
-                        args.files.forEach(function(file){
+                        args.files.forEach(function (file) {
 
-                            var sub = path.basename(args.directory) + '/'+ path.relative(args.directory, file)
+                            var sub = path.relative(args.directory, file);
                             filez.push(sub)
-                        })
+                        });
 
-                        this.set('files', filez)
+                        this.set('files', filez);
+
                     }.bind(this))
 
-                }.bind(this), true)
+                }.bind(this), true);
 
-                ipc.on('open-document',function(e, args){
-                    this.clean(function(){
+                ipc.on('open-document', function (e, args) {
 
-                        require('fs').watch(args.directory, function(eventType, filename){
-                            if(filename){
+                    this.clean(function () {
+
+                        require('fs').watch(args.directory, function (eventType, filename) {
+                            if (filename) {
                                 window.cmacc.compose(this.ast.file, null, function (err, ast) {
 
                                     this.ast = ast;
@@ -76,20 +73,20 @@
                             }
                         }.bind(this))
 
-                        this.currentDir = 'file://'+args.directory
-                        this.set('files',[(path.basename(args.directory) + '/'+ path.relative(args.directory, args.files))])
+
+                        this.currentDir = 'file://' + args.directory
+                        this.set('files', [path.relative(args.directory, args.files)])
 
                     }.bind(this))
 
                 }.bind(this), true)
 
-                ipc.on('open-directory',function(e, args){
+                ipc.on('open-directory', function (e, args) {
 
+                    this.clean(function () {
 
-                    this.clean(function(){
-
-                        require('fs').watch(args.directory, function(eventType, filename){
-                            if(filename){
+                        require('fs').watch(args.directory, function (eventType, filename) {
+                            if (filename) {
                                 window.cmacc.compose(this.ast.file, null, function (err, ast) {
 
                                     this.ast = ast;
@@ -97,12 +94,14 @@
                             }
                         }.bind(this))
 
-                        this.currentDir = 'file://'+args.directory
+                        this.currentDir = 'file://' + args.directory
 
+                        console.log('=-=-=-=-=-', args.directory, this.currentDir)
                         let filez = [];
-                        args.files.forEach(function(file){
+                        args.files.forEach(function (file) {
+                            console.log(file);
 
-                            var sub = path.basename(args.directory) + '/'+ path.relative(args.directory, file)
+                            var sub = path.relative(args.directory, file)
                             filez.push(sub)
                         })
 
@@ -110,52 +109,44 @@
                     }.bind(this))
                 }.bind(this), true)
 
-                ipc.on('daemon-ready', function(e, args){
+                ipc.on('daemon-ready', function (e, args) {
                     this.$.daemon.open();
                 }.bind(this), true)
 
-                ipc.on('save-current', function(e){
-
-                    cmacc.serialize(this.ast, function(err, text){
-                        console.log(this.file.substring(7))
-                        console.log(text)
-                        var dir = path.relative(path.dirname(location.pathname), this.file.substring(7))
-                        require('fs').writeFile(dir,text , function(err){
-                            console.log(err)
-                        })
-                    }.bind(this))
+                ipc.on('save-current', function (e) {
+                    console.log(this.file.substring(7))
+                    console.log('save---', this.ast.src)
+                    var file = this.file.substring(7);
+                    require('fs').writeFile(file, this.ast.src, function (err) {
+                        console.log(err)
+                    })
                 }.bind(this), true)
 
-                ipc.on('save-document', function(e, args){
+                ipc.on('save-document', function (e, args) {
                     //this.currentDir = args;
-                    cmacc.serialize(this.ast, function(err, text){
+                    cmacc.serialize(this.ast, function (err, text) {
                         util = require('util')
-                        require('fs').writeFile(args,text, function(){
+                        require('fs').writeFile(args, text, function () {
 
                         })
                     })
                 }.bind(this), true)
 
-                ipc.on('publish', function(){
-                    ipc.send('ipfs-add', this.currentDir )
+                ipc.on('publish', function () {
+                    ipc.send('ipfs-add', this.currentDir)
 
                 }.bind(this), true)
 
             },
-            refresh:function(){
-                console.log('yeah',this.ast)
+            refresh: function () {
                 document.title = "Common Accord Desktop - " + require('path').basename(this.ast.file)
             },
-            clean: function(cb){
-                console.log('THISAST', this.ast)
-                if (this.ast !== undefined){
+            clean: function (cb) {
+                if (this.ast !== undefined) {
                     window.cmacc.compose(this.ast.file, null, function (err, ast) {
-
                         this.ast = ast;
-                        console.log("THISAST2", this.ast)
                         cb()
                     }.bind(this))
-
                 }
                 else cb()
 

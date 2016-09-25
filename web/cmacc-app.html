@@ -57,9 +57,8 @@
             background: #FFF;
         }
 
-
         #daemon {
-            --paper-toast-background-color:#4285f4;
+            --paper-toast-background-color: #4285f4;
             --paper-toast-color: white;
         }
 
@@ -76,12 +75,12 @@
 
         <div>
 
-                <app-drawer-layout fullbleed>
+            <app-drawer-layout fullbleed>
 
-                    <app-drawer algin="start" opened>
-                        <cmacc-sidebar ast="{{ast}}"></cmacc-sidebar>
-                    </app-drawer>
-                    <app-header-layout>
+                <app-drawer algin="start" opened>
+                    <cmacc-sidebar ast="{{ast}}"></cmacc-sidebar>
+                </app-drawer>
+                <app-header-layout>
                     <app-header>
                         <app-toolbar>
                             <div main-title>Common Accord</div>
@@ -94,28 +93,25 @@
                     </app-header>
 
 
+                    <iron-pages selected="{{page}}">
+                        <div id="container">
+                            <div id="wrapper">
+                                <paper-material id="page" elevation="1">
+                                    <cmacc-document ast="{{ast}}"></cmacc-document>
+                                </paper-material>
+                            </div>
 
-
-
-                <iron-pages selected="{{page}}">
-                    <div id="container">
-                        <div id="wrapper">
-                            <paper-material id="page" elevation="1">
-                                <cmacc-document ast="{{ast}}"></cmacc-document>
-                            </paper-material>
                         </div>
+                        <div id="container">
+                            <div id="wrapper">
+                                <paper-material id="page" elevation="1">
+                                    <cmacc-source ast="{{ast}}"></cmacc-source>
+                                </paper-material>
+                            </div>
 
-                    </div>
-                    <div id="container">
-                        <div id="wrapper">
-                            <paper-material id="page" elevation="1">
-                                <cmacc-source ast="{{ast}}"></cmacc-source>
-                            </paper-material>
                         </div>
-
-                    </div>
-                </iron-pages>
-                    </app-header-layout>
+                    </iron-pages>
+                </app-header-layout>
 
             </app-drawer-layout>
         </div>
@@ -130,14 +126,14 @@
                     type: Object,
                     observer: 'refresh'
                 },
-                localState:{
+                localState: {
                     type: Object,
-                    value:{
-                        currentDir:null
+                    value: {
+                        currentDir: null
                     }
 
                 },
-                files:{
+                files: {
                     type: Array,
                 }
             },
@@ -155,42 +151,38 @@
 
                 var ipc = require('electron').ipcRenderer;
 
-                ipc.on('new-document', function(){
+                ipc.on('new-document', function () {
                     this.go("hello world");
 
                 }.bind(this), true)
 
-                ipc.on('open-document',function(e, args){
+                ipc.on('open-document', function (e, args) {
                     this.localState.currentDir = args
 
                     this.go(args)
                 }.bind(this), true)
 
-                ipc.on('open-directory',function(e, args){
+                ipc.on('open-directory', function (e, args) {
                     console.log(args)
                     this.localState.currentDir = args.directory
                     this.files = args.files
                 }.bind(this), true)
 
-                ipc.on('daemon-ready', function(e, args){
+                ipc.on('daemon-ready', function (e, args) {
                     this.$.daemon.open();
                 }.bind(this), true)
 
-                ipc.on('save-document', function(e, args){
+                ipc.on('save-document', function (e, args) {
                     this.localState.currentDir = args;
-                    cmacc.serialize(this.ast, function(err, text){
-                        util = require('util')
-                        require('fs').writeFile(args,text, function(){
-
-                        })
-                    })
-
+                    util = require('util');
+                    console.log('save---', this.ast.src)
+                    require('fs').writeFile(args, this.ast.src, function () {})
                 }.bind(this), true)
 
-                ipc.on('publish', function(){
-                    console.log(this.localState.currentDir)
+                ipc.on('publish', function () {
+                    console.log(this.localState.currentDir);
 
-                    ipc.send('ipfs-add', this.localState.currentDir )
+                    ipc.send('ipfs-add', this.localState.currentDir)
 
                 }.bind(this), true)
 
@@ -215,10 +207,8 @@
                 //document.getElementById('left').toggle();
             },
             save: function (loc) {
-
                 util = require('util')
-                require('fs').writeFile(loc,util.inspect( this.ast.variables[0], false, null), function(){
-
+                require('fs').writeFile(loc, util.inspect(this.ast.variables[0], false, null), function () {
                 })
             },
             getDoc: function () {
