@@ -30,15 +30,15 @@
                     type: String,
                     //observer:'watch'
                 },
-                src:{
-                    type:Object
+                src: {
+                    type: Object
                 }
 
             },
             ready: function () {
 
                 var ipc = require('electron').ipcRenderer;
-                var path = require('path')
+                var path = require('path');
 
                 this.addEventListener('cmacc-save', function (e) {
                     ipc.send('common-accord-save')
@@ -69,10 +69,8 @@
 
                         require('fs').watch(args.directory, function (eventType, filename) {
                             if (filename) {
-                                window.cmacc.compose(this.file, null, function (err, ast) {
-                                    console.log('HEEEEEE',ast)
-                                    //this.ast = ast;
-                                }.bind(this))
+                                this.set('file', '');
+                                this.set('file', filename);
                             }
                         }.bind(this))
 
@@ -94,64 +92,36 @@
                                 this.set('file', '');
                                 this.set('file', tmpFile);
                             }
-                        }.bind(this))
+                        }.bind(this));
 
                         this.currentDir = 'file://' + args.directory;
 
-                        var filez = [];
-                        args.files.forEach(function (file) {
-                            var sub = path.relative(args.directory, file);
-                            console.log(sub)
-                            if(sub.match(/\.cmacc$/))
-                                filez.push(sub)
-                        })
+                        var files = args.files.map(function (file) {
+                            return path.relative(args.directory, file);
+                        }).filter(function (file) {
+                            console.log(file);
+                            return file.match(/\.cmacc$/) !== null;
+                        });
 
-                        this.set('files', filez)
+                        this.set('files', files);
+
                     }.bind(this))
                 }.bind(this), true)
 
-                ipc.on('daemon-ready', function (e, args) {
-                    this.$.daemon.open();
-                }.bind(this), true)
-
                 ipc.on('save-current', function (e) {
-                    console.log(this.file.substring(7))
-                    console.log('save---', this.src)
                     var file = this.file.substring(7);
                     require('fs').writeFile(file, this.src, function (err) {
-                        console.log(err)
-                    })
-                }.bind(this), true)
-
-                ipc.on('save-document', function (e, args) {
-                    //this.currentDir = args;
-                    cmacc.serialize(this.ast, function (err, text) {
-                        util = require('util')
-                        require('fs').writeFile(args, text, function () {
-
-                        })
-                    })
-                }.bind(this), true)
-
-                ipc.on('publish', function () {
-                    ipc.send('ipfs-add', this.currentDir)
-
-                }.bind(this), true)
+                        if (err) return console.log(err);
+                    });
+                }.bind(this), true);
 
             },
             refresh: function () {
-
-                console.log('ASTAST', this.ast)
-
-                console.log('source', this.src)
-                console.log('file', this.file)
-
                 document.title = "Common Accord Desktop - " + require('path').basename(this.file)
             },
             clean: function (cb) {
                 if (this.ast !== undefined) {
                     window.cmacc.compose(this.file, null, function (err, ast) {
-                        console.log('WHAAAAATAST', err, ast)
                         this.ast = ast;
                         cb()
                     }.bind(this))
@@ -159,17 +129,8 @@
                 else cb()
 
 
-            },
-//            watch: function(){
-//                require('fs').watch(this.file.substring(7), function(eventType, filename){
-//                    if(filename){
-//                        window.cmacc.compose(this.ast.file, null, function (err, ast) {
-//
-//                            this.ast = ast;
-//                        }.bind(this))
-//                    }
-//                }.bind(this))
-//            }
+            }
+
         })
     </script>
 
