@@ -9,7 +9,7 @@
     <template>
         <paper-toast id="daemon" text="ipfs connected"></paper-toast>
 
-        <cmacc-app ast="{{ast}}" files="{{files}}" base="{{currentDir}}" file="{{file}}"></cmacc-app>
+        <cmacc-app ast="{{ast}}" files="{{files}}" src="{{src}}" base="{{currentDir}}" file="{{file}}"></cmacc-app>
     </template>
 
     <script>
@@ -29,7 +29,11 @@
                 file: {
                     type: String,
                     //observer:'watch'
+                },
+                src:{
+                    type:Object
                 }
+
             },
             ready: function () {
 
@@ -66,9 +70,9 @@
 
                         require('fs').watch(args.directory, function (eventType, filename) {
                             if (filename) {
-                                window.cmacc.compose(this.ast.file, null, function (err, ast) {
-
-                                    this.ast = ast;
+                                window.cmacc.compose(this.file, null, function (err, ast) {
+                                    console.log('HEEEEEE',ast)
+                                    //this.ast = ast;
                                 }.bind(this))
                             }
                         }.bind(this))
@@ -87,17 +91,20 @@
 
                         require('fs').watch(args.directory, function (eventType, filename) {
                             if (filename) {
-                                window.cmacc.compose(this.ast.file, null, function (err, ast) {
-
-                                    this.ast = ast;
-                                }.bind(this))
+                                var tmpFile = this.file;
+                                this.set('file', '');
+                                this.set('file', tmpFile);
+//                                window.cmacc.compile(this.file, null, function (err, ast) {
+//
+//                                    this.ast = ast;
+//                                }.bind(this))
                             }
                         }.bind(this))
 
                         this.currentDir = 'file://' + args.directory
 
                         console.log('=-=-=-=-=-', args.directory, this.currentDir)
-                        let filez = [];
+                        var filez = [];
                         args.files.forEach(function (file) {
                             console.log(file);
 
@@ -115,9 +122,9 @@
 
                 ipc.on('save-current', function (e) {
                     console.log(this.file.substring(7))
-                    console.log('save---', this.ast.src)
+                    console.log('save---', this.src)
                     var file = this.file.substring(7);
-                    require('fs').writeFile(file, this.ast.src, function (err) {
+                    require('fs').writeFile(file, this.src, function (err) {
                         console.log(err)
                     })
                 }.bind(this), true)
@@ -139,11 +146,18 @@
 
             },
             refresh: function () {
-                document.title = "Common Accord Desktop - " + require('path').basename(this.ast.file)
+
+                console.log('ASTAST', this.ast)
+
+                console.log('source', this.src)
+                console.log('file', this.file)
+
+                document.title = "Common Accord Desktop - " + require('path').basename(this.file)
             },
             clean: function (cb) {
                 if (this.ast !== undefined) {
-                    window.cmacc.compose(this.ast.file, null, function (err, ast) {
+                    window.cmacc.compose(this.file, null, function (err, ast) {
+                        console.log('WHAAAAATAST', err, ast)
                         this.ast = ast;
                         cb()
                     }.bind(this))

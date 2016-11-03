@@ -1,7 +1,7 @@
 var path = require('path');
 
 module.exports = {
-    entry: './node_modules/cmacc-compiler/src/cmacc.js',
+    entry: './node_modules/cmacc-compiler/src/index.js',
 
     output: {
         path: path.resolve(__dirname, "assets"),
