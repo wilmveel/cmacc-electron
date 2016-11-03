@@ -46,7 +46,6 @@
 
                 ipc.on('new-document', function (e, args) {
 
-
                     this.clean(function () {
 
                         this.currentDir = 'file://' + args.directory;
@@ -94,22 +93,17 @@
                                 var tmpFile = this.file;
                                 this.set('file', '');
                                 this.set('file', tmpFile);
-//                                window.cmacc.compile(this.file, null, function (err, ast) {
-//
-//                                    this.ast = ast;
-//                                }.bind(this))
                             }
                         }.bind(this))
 
-                        this.currentDir = 'file://' + args.directory
+                        this.currentDir = 'file://' + args.directory;
 
-                        console.log('=-=-=-=-=-', args.directory, this.currentDir)
                         var filez = [];
                         args.files.forEach(function (file) {
-                            console.log(file);
-
-                            var sub = path.relative(args.directory, file)
-                            filez.push(sub)
+                            var sub = path.relative(args.directory, file);
+                            console.log(sub)
+                            if(sub.match(/\.cmacc$/))
+                                filez.push(sub)
                         })
 
                         this.set('files', filez)
